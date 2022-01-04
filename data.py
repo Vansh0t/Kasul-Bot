@@ -50,7 +50,7 @@ class GuildData:
         if len(self.__audio_queue) >= QUEUE_MAX_SIZE:
             raise QueueSizeMax()
         #the last audio is already playing, insert new right before it
-        if len(self.__audio_queue)>0 and self.cur_audio.title == self.__audio_queue[-1].title:
+        if len(self.__audio_queue)>0 and self.cur_audio and self.cur_audio.title == self.__audio_queue[-1].title:
             self.__audio_queue.insert(-1, audio_data)
         else:
             self.__audio_queue.append(audio_data)
@@ -106,6 +106,12 @@ class GuildData:
         self.audio_offset = sec_offset
     def set_audio_stopped(self):
         self.audio_started = None
+        self.audio_paused_last = None
+        self.cur_audio = None
+        self.audio_paused_last = None
+        self.audio_paused_sum = get_timedelta_zero()
+        self.audio_length = 0
+        self.audio_offset = 0
     def set_audio_paused(self):
         self.audio_paused_last = get_time_now()
     def set_audio_resumed(self):

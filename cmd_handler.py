@@ -3,6 +3,7 @@ from discord.ext.commands import Context
 from data import get_guild_data, GuildData, QueueIsEmpty, AudioData
 from discord_slash.utils.manage_commands import create_option
 from utils import get_yt_data_async
+from logging import exception
 
 
 dev_guild_ids = [919591541914353714, 598571406753660929, 927208182609219664]
@@ -19,7 +20,7 @@ def init_commands(slash, bot):
                 await ctx.send("Yo, KASULS!")
                 return True
             except Exception as e:
-                print(e)
+                exception('message')
                 return False
         return True
         
@@ -54,7 +55,7 @@ def init_commands(slash, bot):
             g_data.queue_move(g_data.cur_audio, 0)
             g_data.set_audio_started(audio_data, audio_data.time_offset)
         except Exception as e:
-            print(e)
+            exception('message')
             await ctx.send("OOOPS, somebody is KASUL!")
     @slash.slash(name="enqueue",
                 description="Add an audio from url to the queue. If queue was empty starts playing.",
@@ -88,7 +89,7 @@ def init_commands(slash, bot):
                 audio_data = await a_player.play_from_url(url)
                 g_data.set_audio_started(audio_data, audio_data.time_offset)
         except Exception as e:
-            print(e)
+            exception('message')
             await ctx.send("OOOPS, somebody is KASUL!")
     @slash.slash(name="join",
                 description="Join the bot to the voice channel of the caller.",
@@ -110,7 +111,7 @@ def init_commands(slash, bot):
             await ctx.voice_client.disconnect()
             await ctx.send("Bye, KASULS!")
         except Exception as e:
-            print(e)
+            exception('message')
             await ctx.send("I'm not in the channel, you damn KASUL!")
     @slash.slash(name="resume",
                 description="Resume paused audio.",
@@ -126,7 +127,7 @@ def init_commands(slash, bot):
             else:
                 await ctx.send("Nothing to resume")
         except Exception as e:
-            print(e)
+            exception('message')
             await ctx.send("OOOPS, somebody is KASUL!")
     @slash.slash(name="pause",
                 description="Pause the currently playing audio.",
@@ -142,7 +143,7 @@ def init_commands(slash, bot):
             else:
                 ctx.send("Nothing to pause")
         except Exception as e:
-            print(e)
+            exception('message')
             await ctx.send("OOOPS, somebody is KASUL!")
     @slash.slash(name="skip",
                 description="Skip the currently playing audio.",
@@ -157,7 +158,7 @@ def init_commands(slash, bot):
         except QueueIsEmpty:
             await ctx.send('Skipped')
         except Exception as e:
-            print(e)
+            exception('message')
             await ctx.send("OOOPS, somebody is KASUL!")
     @slash.slash(name="back",
                 description="Play previous audio from the queue.",
@@ -174,7 +175,7 @@ def init_commands(slash, bot):
         except QueueIsEmpty:
             await ctx.send('Queue is empty')
         except Exception as e:
-            print(e)
+            exception('message')
             await ctx.send("OOOPS, somebody is KASUL!")
 
     @slash.slash(name="clear_queue",
@@ -187,7 +188,7 @@ def init_commands(slash, bot):
             g_data.queue_clear()
             await ctx.send('Queue cleared')
         except Exception as e:
-            print(e)
+            exception('message')
             await ctx.send("OOOPS, somebody is KASUL!")
     
     @slash.slash(name="stop_clear_queue",
@@ -202,7 +203,7 @@ def init_commands(slash, bot):
             ctx.voice_client.stop()
             await ctx.send('Queue stopped and cleared')
         except Exception as e:
-            print(e)
+            exception('message')
             await ctx.send("OOOPS, somebody is KASUL!")
 
     @slash.slash(name="list_queue",
@@ -220,7 +221,7 @@ def init_commands(slash, bot):
                 reply += f'{counter}. **{audio.title}** | {audio.url}\n'
             await ctx.send(reply)
         except Exception as e:
-            print(e)
+            exception('message')
             await ctx.send("OOOPS, somebody is KASUL!")
     @slash.slash(name="keep_queue",
                 description="Should the audio queue be kept after bot leaves a channel",
@@ -240,7 +241,7 @@ def init_commands(slash, bot):
             g_data.is_queue_persistent = bool_value
             await ctx.send(f"Keep queue set to {bool_value}")
         except Exception as e:
-            print(e)
+            exception('message')
             await ctx.send("OOOPS, somebody is KASUL!")
     @slash.slash(name="web",
                 description="Get url from web controls",
@@ -258,7 +259,7 @@ def init_commands(slash, bot):
                 return
             await ctx.send(f"Web controls url: {web_url}/{g_data.web_id}")
         except Exception as e:
-            print(e)
+            exception('message')
             await ctx.send("OOOPS, somebody is KASUL!")
     
     @slash.slash(name="dev_fill_queue",
@@ -272,7 +273,7 @@ def init_commands(slash, bot):
                 await asyncio.sleep(0.5)
             await web.invoke(ctx)
         except Exception as e:
-            print(e)
+            exception('message')
             await ctx.send("OOOPS, somebody is KASUL!")
 
 

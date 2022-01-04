@@ -2,7 +2,7 @@ from data import get_guild_data_web, QueueIsEmpty, AudioData, GuildData
 from discord.utils import find
 from utils import get_yt_data_async
 from math import floor
-import logging
+from logging import exception
 import json
 
 ROOT_ACCESS_SECRET = 'OkS1vGLyJBwokfat606CqNmqHBNZlfIy'
@@ -30,7 +30,7 @@ async def set_url(args):
         
         return json.dumps({'type':'result', 'data':{}})
     except Exception as e:
-        print(e)
+        exception('message')
         return json.dumps({'type':'error', 'data':{}})
 
 async def set_play_pos(args):
@@ -44,7 +44,7 @@ async def set_play_pos(args):
         result = json.dumps({'type':'result', 'data':{'playtime': g_data.get_playtime(), 'length':audio_data.length}})
         return result
     except Exception as e:
-        print(e)
+        exception('message')
         error = json.dumps({'type':'error', 'message':'Unable to find voice channel. Invite with /join first'})
         return error
 
@@ -55,7 +55,7 @@ async def get_queue(args):
         result = json.dumps({'type':'result', 'data':{'queue':g_data.get_queue_json()}})
         return result
     except Exception as e:
-        print(e)
+        exception('message')
         error = json.dumps({'type':'error', 'message':'Failed to find guild data'})
         return error
 
@@ -65,7 +65,7 @@ async def get_cur_audio(args):
         result = json.dumps({'type':'result', 'data':g_data.get_cur_audio_web()})
         return result
     except Exception as e:
-        print(e)
+        exception('message')
         error = json.dumps({'type':'error', 'message':'Failed to find guild data'})
         return error
 
@@ -80,7 +80,7 @@ async def get_playing(args):
                                                     'is_queue_persistent':g_data.is_queue_persistent}})
         return result
     except Exception as e:
-        print(e)
+        exception('message')
         error = json.dumps({'type':'error', 'message':'Failed to find guild data'})
         return error
 
@@ -95,7 +95,7 @@ async def play(args):
         result = json.dumps({'type':'result', 'data':{}})
         return result
     except Exception as e:
-        print(e)
+        exception('message')
         error = json.dumps({'type':'error', 'message':'Unable to find voice channel. Invite with /join first'})
         return error
 
@@ -109,7 +109,7 @@ async def skip(args):
         result = json.dumps({'type':'result', 'data':{'queue':[]}})
         return result
     except Exception as e:
-        print(e)
+        exception('message')
         error = json.dumps({'type':'error', 'message':'Unable to skip'})
         return error
 
@@ -125,8 +125,7 @@ async def back(args):
         result = json.dumps({'type':'result', 'data':{'queue':[]}})
         return result
     except Exception as e:
-        print(e)
-        logging.exception('message')
+        exception('message')
         error = json.dumps({'type':'error', 'message':'Unable to skip'})
         return error
 
@@ -138,7 +137,7 @@ async def pause(args):
         result = json.dumps({'type':'result', 'data':f'{g_data.get_playtime()}'})
         return result
     except Exception as e:
-        print(e)
+        exception('message')
         error = json.dumps({'type':'error', 'message':'Unable to skip'})
         return error
 
@@ -150,7 +149,7 @@ async def resume(args):
         result = json.dumps({'type':'result', 'data':f'{g_data.get_playtime()}'})
         return result
     except Exception as e:
-        print(e)
+        exception('message')
         error = json.dumps({'type':'error', 'message':'Unable to resume'})
         return error
 
@@ -167,7 +166,7 @@ async def enqueue(args):
         result = json.dumps({'type':'result', 'data':{'queue':g_data.get_queue_json()}})
         return result
     except Exception as e:
-        print(e)
+        exception('message')
         error = json.dumps({'type':'error', 'message':'Unable to find voice channel or youtube url is invalid. Invite with /join first'})
         return error
 
@@ -179,7 +178,7 @@ async def queue_move(args):
         result = json.dumps({'type':'result', 'data':{'queue':g_data.get_queue_json()}})
         return result
     except Exception as e:
-        print(e)
+        exception('message')
         error = json.dumps({'type':'error', 'message':'Unable to execute command'})
         return error
 
@@ -191,7 +190,7 @@ async def queue_remove(args):
         result = json.dumps({'type':'result', 'data':{'queue':g_data.get_queue_json()}})
         return result
     except Exception as e:
-        print(e)
+        exception('message')
         error = json.dumps({'type':'error', 'message':'Unable to execute command'})
         return error
 
@@ -203,7 +202,7 @@ async def queue_keep(args):
         result = json.dumps({'type':'result', 'data':{'is_queue_persistent':g_data.is_queue_persistent}})
         return result
     except Exception as e:
-        print(e)
+        exception('message')
         error = json.dumps({'type':'error', 'message':'Unable to execute command'})
         return error
 
@@ -214,7 +213,7 @@ async def queue_clear(args):
         result = json.dumps({'type':'result', 'data':{'queue':g_data.get_queue_json()}})
         return result
     except Exception as e:
-        print(e)
+        exception('message')
         error = json.dumps({'type':'error', 'message':'Unable to execute command'})
         return error
 

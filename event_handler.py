@@ -39,6 +39,7 @@ def init_events(bot):
             if g_data.is_queue_persistent ==False:
                 g_data.audio_queue.empty() 
             g_data.audio_player = None
+            g_data.set_audio_stopped()
             vc = find(lambda x: x.guild.id == g_id, bot.voice_clients)
             if vc:
                 vc.cleanup()
