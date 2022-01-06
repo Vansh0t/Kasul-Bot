@@ -4,7 +4,7 @@
 
 Kasul Bot is easy to deploy audio bot made with [discord.py](https://github.com/Rapptz/discord.py) and [pytube](https://github.com/pytube/pytube). It has a convenient web ui controls feature, check it out [here](https://github.com/Vansh0t/Kasul-Bot-Web-Controls)
 
-Kasul Bot doesn't depend on the single bot instance to serve audio. In fact you create your own bot on Discord Developer Portal (see 'Installation' below) and just pass its id to config.ini of Kasul Bot, that's all, no coding required. This means you use your own dedicated server or PC only for your discord servers to avoid performance and stability issues of many popular servers.
+Kasul Bot doesn't depend on the single bot instance to serve audio. In fact you create your own bot on Discord Developer Portal (see 'Installation' below) and just pass its id to config.ini of Kasul Bot, that's all, no coding required. This means you use your own dedicated server or PC only for your discord servers to avoid performance and stability issues of many popular discord audio streaming bots.
 
 ## Features
 - Playing audio from YouTube url
@@ -14,7 +14,7 @@ Kasul Bot doesn't depend on the single bot instance to serve audio. In fact you 
 - (Opt) [Web Controls UI](https://github.com/Vansh0t/Kasul-Bot-Web-Controls)
 
 ## Installation
-Discord treats all bots individualy so in order to be able to host a personal bot on your on server or PC you have to register it first on Discord Developer Portal.
+Discord treats all bots individualy so in order to be able to host a personal bot on your own server or PC you have to register it first on Discord Developer Portal.
 1. Go to https://discord.com/developers/applications
 2. Create 'New Application'
 3. (Opt) Add tags and description
