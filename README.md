@@ -1,6 +1,6 @@
 # Kasul-Bot
 
-Kasul Bot has a convinient web ui controls feature, check it out [here](https://github.com/Vansh0t/Kasul-Bot-Web-Controls)
+Kasul Bot has a convenient web ui controls feature, check it out [here](https://github.com/Vansh0t/Kasul-Bot-Web-Controls)
 
 Kasul Bot is easy to deploy audio bot made with [discord.py](https://github.com/Rapptz/discord.py) and [pytube](https://github.com/pytube/pytube).
 
