@@ -5,7 +5,6 @@ from math import floor
 from logging import exception
 import json
 
-ROOT_ACCESS_SECRET = 'OkS1vGLyJBwokfat606CqNmqHBNZlfIy'
 web_url = ''
 
 bot = None
@@ -45,7 +44,7 @@ async def set_play_pos(args):
         return result
     except Exception as e:
         exception('message')
-        error = json.dumps({'type':'error', 'message':'Unable to find voice channel. Invite with /join first'})
+        error = json.dumps({'type':'error', 'message':str(e)})
         return error
 
 async def get_queue(args):
@@ -56,7 +55,7 @@ async def get_queue(args):
         return result
     except Exception as e:
         exception('message')
-        error = json.dumps({'type':'error', 'message':'Failed to find guild data'})
+        error = json.dumps({'type':'error', 'message':str(e)})
         return error
 
 async def get_cur_audio(args):
@@ -66,7 +65,7 @@ async def get_cur_audio(args):
         return result
     except Exception as e:
         exception('message')
-        error = json.dumps({'type':'error', 'message':'Failed to find guild data'})
+        error = json.dumps({'type':'error', 'message':str(e)})
         return error
 
 async def get_playing(args):
@@ -81,7 +80,7 @@ async def get_playing(args):
         return result
     except Exception as e:
         exception('message')
-        error = json.dumps({'type':'error', 'message':'Failed to find guild data'})
+        error = json.dumps({'type':'error', 'message':str(e)})
         return error
 
 async def play(args):
@@ -96,7 +95,7 @@ async def play(args):
         return result
     except Exception as e:
         exception('message')
-        error = json.dumps({'type':'error', 'message':'Unable to find voice channel. Invite with /join first'})
+        error = json.dumps({'type':'error', 'message':str(e)})
         return error
 
 async def skip(args):
@@ -110,7 +109,7 @@ async def skip(args):
         return result
     except Exception as e:
         exception('message')
-        error = json.dumps({'type':'error', 'message':'Unable to skip'})
+        error = json.dumps({'type':'error', 'message':str(e)})
         return error
 
 async def back(args):
@@ -126,7 +125,7 @@ async def back(args):
         return result
     except Exception as e:
         exception('message')
-        error = json.dumps({'type':'error', 'message':'Unable to skip'})
+        error = json.dumps({'type':'error', 'message':str(e)})
         return error
 
 async def pause(args):
@@ -138,7 +137,7 @@ async def pause(args):
         return result
     except Exception as e:
         exception('message')
-        error = json.dumps({'type':'error', 'message':'Unable to skip'})
+        error = json.dumps({'type':'error', 'message':str(e)})
         return error
 
 async def resume(args):
@@ -150,7 +149,7 @@ async def resume(args):
         return result
     except Exception as e:
         exception('message')
-        error = json.dumps({'type':'error', 'message':'Unable to resume'})
+        error = json.dumps({'type':'error', 'message':str(e)})
         return error
 
 async def enqueue(args):
@@ -167,7 +166,7 @@ async def enqueue(args):
         return result
     except Exception as e:
         exception('message')
-        error = json.dumps({'type':'error', 'message':'Unable to find voice channel or youtube url is invalid. Invite with /join first'})
+        error = json.dumps({'type':'error', 'message':str(e)})
         return error
 
 async def queue_move(args):
@@ -179,7 +178,7 @@ async def queue_move(args):
         return result
     except Exception as e:
         exception('message')
-        error = json.dumps({'type':'error', 'message':'Unable to execute command'})
+        error = json.dumps({'type':'error', 'message':str(e)})
         return error
 
 async def queue_remove(args):
@@ -191,7 +190,7 @@ async def queue_remove(args):
         return result
     except Exception as e:
         exception('message')
-        error = json.dumps({'type':'error', 'message':'Unable to execute command'})
+        error = json.dumps({'type':'error', 'message':str(e)})
         return error
 
 async def queue_keep(args):
@@ -203,7 +202,7 @@ async def queue_keep(args):
         return result
     except Exception as e:
         exception('message')
-        error = json.dumps({'type':'error', 'message':'Unable to execute command'})
+        error = json.dumps({'type':'error', 'message':str(e)})
         return error
 
 async def queue_clear(args):
@@ -214,7 +213,7 @@ async def queue_clear(args):
         return result
     except Exception as e:
         exception('message')
-        error = json.dumps({'type':'error', 'message':'Unable to execute command'})
+        error = json.dumps({'type':'error', 'message':str(e)})
         return error
 
 CMD_CALLBACKS = {

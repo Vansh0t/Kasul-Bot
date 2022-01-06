@@ -4,10 +4,21 @@ from data import get_guild_data, GuildData, QueueIsEmpty, AudioData
 from discord_slash.utils.manage_commands import create_option
 from utils import get_yt_data_async
 from logging import exception
+from configparser import ConfigParser
 
+dev_guild_ids = None
+dev_urls = None
 
-dev_guild_ids = [919591541914353714, 598571406753660929, 927208182609219664]
-dev_urls = ['https://www.youtube.com/watch?v=20sIhZLVJR4', 'https://www.youtube.com/watch?v=uxfoa23skHg', 'https://www.youtube.com/watch?v=2YTBgFmK_bs']
+try:
+    dev_config = ConfigParser()
+    dev_config.read('dev_config.ini')
+    dev_guild_ids = [int(x) for x in dev_config['DEV']['Guilds'].split(',')]
+    dev_urls = dev_config['DEV']['Videos'].split(',')
+    print(dev_guild_ids)
+    print(dev_urls)
+except:
+    pass
+
 
 
 
@@ -26,7 +37,6 @@ def init_commands(slash, bot):
         
     @slash.slash(name="ping",
                 description="Sends ping to test bot's condition",
-                guild_ids=dev_guild_ids,
                 )
     async def ping(ctx: Context):
         await ctx.send('pong')
@@ -40,7 +50,6 @@ def init_commands(slash, bot):
                       required=True
                     )
                 ],
-                guild_ids=dev_guild_ids,
                 )
     async def play(ctx: Context, url):
         try:
@@ -56,7 +65,7 @@ def init_commands(slash, bot):
             g_data.set_audio_started(audio_data, audio_data.time_offset)
         except Exception as e:
             exception('message')
-            await ctx.send("OOOPS, somebody is KASUL!")
+            await ctx.send("Unable to execute command!")
     @slash.slash(name="enqueue",
                 description="Add an audio from url to the queue. If queue was empty starts playing.",
                 options=[
@@ -67,7 +76,6 @@ def init_commands(slash, bot):
                       required=True
                     )
                 ],
-                guild_ids=dev_guild_ids,
                 )
     async def enqueue(ctx: Context, url):
         try:
@@ -90,10 +98,9 @@ def init_commands(slash, bot):
                 g_data.set_audio_started(audio_data, audio_data.time_offset)
         except Exception as e:
             exception('message')
-            await ctx.send("OOOPS, somebody is KASUL!")
+            await ctx.send("Unable to execute command!")
     @slash.slash(name="join",
                 description="Join the bot to the voice channel of the caller.",
-                guild_ids=dev_guild_ids,
                 )
     async def join(ctx: Context):
         if await _join_channel(ctx) == False:
@@ -104,7 +111,6 @@ def init_commands(slash, bot):
             g_data.get_audio_player(ctx)
     @slash.slash(name="leave",
                 description="Disconnect the bot from the voice channel.",
-                guild_ids=dev_guild_ids,
                 )
     async def leave(ctx: Context):
         try:
@@ -112,10 +118,9 @@ def init_commands(slash, bot):
             await ctx.send("Bye, KASULS!")
         except Exception as e:
             exception('message')
-            await ctx.send("I'm not in the channel, you damn KASUL!")
+            await ctx.send("Not in the channel!")
     @slash.slash(name="resume",
                 description="Resume paused audio.",
-                guild_ids=dev_guild_ids,
                 )
     async def resume(ctx: Context):
         try:
@@ -128,10 +133,9 @@ def init_commands(slash, bot):
                 await ctx.send("Nothing to resume")
         except Exception as e:
             exception('message')
-            await ctx.send("OOOPS, somebody is KASUL!")
+            await ctx.send("Unable to execute command!")
     @slash.slash(name="pause",
                 description="Pause the currently playing audio.",
-                guild_ids=dev_guild_ids,
                 )
     async def pause(ctx: Context):
         try:
@@ -144,10 +148,9 @@ def init_commands(slash, bot):
                 ctx.send("Nothing to pause")
         except Exception as e:
             exception('message')
-            await ctx.send("OOOPS, somebody is KASUL!")
+            await ctx.send("Unable to execute command!")
     @slash.slash(name="skip",
                 description="Skip the currently playing audio.",
-                guild_ids=dev_guild_ids,
                 )
     async def skip(ctx: Context):
         try:
@@ -159,10 +162,9 @@ def init_commands(slash, bot):
             await ctx.send('Skipped')
         except Exception as e:
             exception('message')
-            await ctx.send("OOOPS, somebody is KASUL!")
+            await ctx.send("Unable to execute command!")
     @slash.slash(name="back",
                 description="Play previous audio from the queue.",
-                guild_ids=dev_guild_ids,
                 )
     async def back(ctx: Context):
         try:
@@ -176,11 +178,10 @@ def init_commands(slash, bot):
             await ctx.send('Queue is empty')
         except Exception as e:
             exception('message')
-            await ctx.send("OOOPS, somebody is KASUL!")
+            await ctx.send("Unable to execute command!")
 
     @slash.slash(name="clear_queue",
                 description="Clear the queue. Doesn't stop currently playing audio. To clear with stop use stop_clear_queue",
-                guild_ids=dev_guild_ids,
                 )
     async def clear_queue(ctx: Context):
         try:
@@ -189,11 +190,10 @@ def init_commands(slash, bot):
             await ctx.send('Queue cleared')
         except Exception as e:
             exception('message')
-            await ctx.send("OOOPS, somebody is KASUL!")
+            await ctx.send("Unable to execute command!")
     
     @slash.slash(name="stop_clear_queue",
                 description="Clear the queue and stop any playing audio.",
-                guild_ids=dev_guild_ids,
                 )
     async def stop_clear_queue(ctx: Context):
         try:
@@ -204,11 +204,10 @@ def init_commands(slash, bot):
             await ctx.send('Queue stopped and cleared')
         except Exception as e:
             exception('message')
-            await ctx.send("OOOPS, somebody is KASUL!")
+            await ctx.send("Unable to execute command!")
 
     @slash.slash(name="list_queue",
                 description="Shows the current queue.",
-                guild_ids=dev_guild_ids,
                 )
     async def list_queue(ctx: Context):
         try: 
@@ -222,7 +221,7 @@ def init_commands(slash, bot):
             await ctx.send(reply)
         except Exception as e:
             exception('message')
-            await ctx.send("OOOPS, somebody is KASUL!")
+            await ctx.send("Unable to execute command!")
     @slash.slash(name="keep_queue",
                 description="Should the audio queue be kept after bot leaves a channel",
                 options=[
@@ -233,7 +232,6 @@ def init_commands(slash, bot):
                       required=True
                     )
                 ],
-                guild_ids=dev_guild_ids,
                 )
     async def keep_queue(ctx: Context, bool_value):
         try: 
@@ -242,10 +240,9 @@ def init_commands(slash, bot):
             await ctx.send(f"Keep queue set to {bool_value}")
         except Exception as e:
             exception('message')
-            await ctx.send("OOOPS, somebody is KASUL!")
+            await ctx.send("Unable to execute command!")
     @slash.slash(name="web",
                 description="Get url from web controls",
-                guild_ids=dev_guild_ids,
                 )
     async def web(ctx: Context):
         try: 
@@ -260,21 +257,21 @@ def init_commands(slash, bot):
             await ctx.send(f"Web controls url: {web_url}/{g_data.web_id}")
         except Exception as e:
             exception('message')
-            await ctx.send("OOOPS, somebody is KASUL!")
-    
-    @slash.slash(name="dev_fill_queue",
-                description="Fill queue for development",
-                guild_ids=dev_guild_ids,
-                )
-    async def dev_fill_queue(ctx: Context):
-        try: 
-            for url in dev_urls:
-                await enqueue.invoke(ctx, url)
-                await asyncio.sleep(0.5)
-            await web.invoke(ctx)
-        except Exception as e:
-            exception('message')
-            await ctx.send("OOOPS, somebody is KASUL!")
+            await ctx.send("Unable to execute command!")
+    if dev_guild_ids:
+        @slash.slash(name="dev_fill_queue",
+                    description="Fill queue for development",
+                    guild_ids=dev_guild_ids,
+                    )
+        async def dev_fill_queue(ctx: Context):
+            try: 
+                for url in dev_urls:
+                    await enqueue.invoke(ctx, url)
+                    await asyncio.sleep(0.5)
+                await web.invoke(ctx)
+            except Exception as e:
+                exception('message')
+                await ctx.send("Unable to execute command!")
 
 
         

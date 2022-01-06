@@ -5,9 +5,9 @@ from bot_main import bot, BOT_TOKEN
 import web_cmd
 from data import guild_data
 
-DEV_GUILD_ID = 919591541914353714
-DEV_VOICE_CHANNEL = 919591541914353718
-YOUTUBE_VIDEO_URL = 'https://www.youtube.com/watch?v=VAZhYlfdGfU'
+DEV_GUILD_ID = None
+DEV_VOICE_CHANNEL = None
+YOUTUBE_VIDEO_URL = None
 dev_guild_web_id = None
 
 def is_bot_response_success(resp):
