@@ -28,7 +28,7 @@ def init_commands(slash, bot):
         if(ctx.voice_client is None):
             try:
                 await ctx.author.voice.channel.connect()
-                await ctx.send("Yo, KASULS!")
+                await ctx.send("Hi!")
                 return True
             except Exception as e:
                 exception('message')
@@ -104,7 +104,7 @@ def init_commands(slash, bot):
                 )
     async def join(ctx: Context):
         if await _join_channel(ctx) == False:
-            await ctx.send('Unable to join the voice channel. You are a KASUL.')  
+            await ctx.send('Unable to join the voice channel.')  
         else:
             #apply context for web controls
             g_data = get_guild_data(ctx.guild.id)
@@ -115,7 +115,7 @@ def init_commands(slash, bot):
     async def leave(ctx: Context):
         try:
             await ctx.voice_client.disconnect()
-            await ctx.send("Bye, KASULS!")
+            await ctx.send("Bye!")
         except Exception as e:
             exception('message')
             await ctx.send("Not in the channel!")
