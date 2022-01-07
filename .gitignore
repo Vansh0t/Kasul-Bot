@@ -130,3 +130,4 @@ dmypy.json
 
 # Development specific
 dev_config.ini
+guild_data/

@@ -45,4 +45,8 @@ def init_events(bot):
                 vc.cleanup()
         else:
             print("joined channel")
+            try:
+                g_data.load_queue()
+            except Exception as e:
+                print(e)
 

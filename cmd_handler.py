@@ -1,4 +1,5 @@
 import asyncio
+from discord import voice_client
 from discord.ext.commands import Context
 from data import get_guild_data, GuildData, QueueIsEmpty, AudioData
 from discord_slash.utils.manage_commands import create_option
@@ -14,8 +15,6 @@ try:
     dev_config.read('dev_config.ini')
     dev_guild_ids = [int(x) for x in dev_config['DEV']['Guilds'].split(',')]
     dev_urls = dev_config['DEV']['Videos'].split(',')
-    print(dev_guild_ids)
-    print(dev_urls)
 except:
     pass
 
@@ -84,10 +83,6 @@ def init_commands(slash, bot):
                 return
             g_data = get_guild_data(ctx.guild.id)
             url_internal, title, length = await get_yt_data_async(url)
-            #yt = YouTube(url)
-            #vid = yt.streams.filter(only_audio=True, audio_codec='opus').last()
-            #title = yt.title
-            #length = yt.length
             audio_data = AudioData(url, url_internal, title, length)
             g_data.queue_append(audio_data)
             await ctx.send('Added to the queue')
@@ -120,15 +115,20 @@ def init_commands(slash, bot):
             exception('message')
             await ctx.send("Not in the channel!")
     @slash.slash(name="resume",
-                description="Resume paused audio.",
+                description="Resume paused audio or start playing the first from the queue.",
                 )
     async def resume(ctx: Context):
         try:
+            g_data = get_guild_data(ctx.guild.id)
             if ctx.voice_client.is_paused():
                 ctx.voice_client.resume()
-                g_data = get_guild_data(ctx.guild.id)
                 g_data.set_audio_resumed()
                 await ctx.send('Resumed')
+            elif not ctx.voice_client.is_playing():
+                a_player = g_data.get_audio_player(ctx)
+                a_player.ensure_context(ctx)
+                audio_data = await a_player.play_from_url(g_data.get_queue()[0].url)
+                g_data.set_audio_started(audio_data, audio_data.time_offset)
             else:
                 await ctx.send("Nothing to resume")
         except Exception as e:

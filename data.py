@@ -2,11 +2,14 @@ import uuid
 from utils import get_time_now, get_timedelta_since, get_timedelta_zero
 from math import floor
 from discord.utils import find
+import os
+from json import dump, load
 
 
 QUEUE_MAX_SIZE = 100
 
 guild_data = {}
+
 
 
 
@@ -54,22 +57,27 @@ class GuildData:
             self.__audio_queue.insert(-1, audio_data)
         else:
             self.__audio_queue.append(audio_data)
+        self.store_queue()
     def queue_insert(self, audio_data):
         if len(self.__audio_queue) >= QUEUE_MAX_SIZE:
             raise QueueSizeMax()
         self.__audio_queue.insert(0, audio_data)
+        self.store_queue(self)
     def queue_move(self, audio_data:AudioData, index):
         if audio_data in self.__audio_queue:
             from_index = self.__audio_queue.index(audio_data)
             audio_data = self.__audio_queue.pop(from_index)
             self.__audio_queue.insert(index, audio_data)
+            self.store_queue()
     def queue_move_index(self, from_index, to_index):
         if from_index == to_index:
             return
         audio_data = self.__audio_queue.pop(from_index)
         self.__audio_queue.insert(to_index, audio_data)
+        self.store_queue()
     def queue_remove_index(self, from_index):
         self.__audio_queue.pop(from_index)
+        self.store_queue()
     def queue_advance(self):
         self.cur_audio = None
         if len(self.__audio_queue) == 0:
@@ -77,6 +85,7 @@ class GuildData:
         first_audio = self.__audio_queue.pop(0)
         self.cur_audio = first_audio
         self.__audio_queue.append(first_audio)
+        self.store_queue()
         return first_audio
     def queue_back(self):
         
@@ -87,9 +96,11 @@ class GuildData:
             self.queue_insert(last_audio)
         last_audio = self.__audio_queue[-1]
         self.cur_audio = last_audio
+        self.store_queue()
         return last_audio
     def queue_clear(self):
         self.__audio_queue.clear()
+        self.store_queue()
     def get_queue(self):
         return self.__audio_queue.copy()
     def get_queue_json(self):
@@ -130,6 +141,19 @@ class GuildData:
         if not self.audio_player:
             self.audio_player = AudioPlayer(self.bot, self, handler)
         return self.audio_player
+    def store_queue(self):
+        if self.is_queue_persistent:
+            if not os.path.exists('guild_data'):
+                os.mkdir('guild_data')
+            with open(os.path.join('guild_data', f'g_{self.id}.json'), 'w+') as f:
+                dump(self.get_queue_json(), f, indent=4, ensure_ascii=False)
+    def load_queue(self):
+        if self.is_queue_persistent:
+            if os.path.exists(os.path.join('guild_data', f'g_{self.id}.json')):
+                with open(os.path.join('guild_data', f'g_{self.id}.json'), 'r') as f:
+                    queue = load(f)
+                    for x in queue:
+                        self.__audio_queue.append(AudioData(x['url'], None, x['title'], x['length']))
     
 
 
@@ -145,3 +169,7 @@ def get_guild_data(guild_id)->GuildData:
 
 def get_guild_data_web(guild_web_id)->GuildData:
     return find(lambda x: x.web_id == guild_web_id, guild_data.values())
+
+
+
+

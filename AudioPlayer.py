@@ -56,7 +56,7 @@ class AudioPlayer:
             await _try_send(ctx, "Timecode must be less than 24 hours")
             return
 
-        if not audio_data:
+        if not audio_data or not audio_data.url_internal:
             url_internal, title, length = await get_yt_data_async(url)
             audio_data = AudioData(url, url_internal, title, length, timecode)
         
