@@ -14,6 +14,7 @@ Kasul Bot doesn't depend on the single bot instance to serve audio. In fact you 
 - (Opt) [Web Controls UI](https://github.com/Vansh0t/Kasul-Bot-Web-Controls)
 
 ## Installation
+0. (Linux) Use `sudo apt update` and `sudo apt install ffmpeg` to install ffmpeg
 1. Download archive for your platform and unpack
 2. Setup the app using steps below
 
