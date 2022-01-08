@@ -82,10 +82,11 @@ def init_commands(slash, bot):
                 await ctx.send('Unable to join voice channel') 
                 return
             g_data = get_guild_data(ctx.guild.id)
+            msg = await ctx.send('Requesting audio data...')
             url_internal, title, length = await get_yt_data_async(url)
             audio_data = AudioData(url, url_internal, title, length)
             g_data.queue_append(audio_data)
-            await ctx.send('Added to the queue')
+            await msg.edit(content=f'**{title}** added to the queue')
             if (g_data.get_queue_len()==1 and g_data.cur_audio == None):
                 a_player = g_data.get_audio_player(ctx)
                 a_player.ensure_context(ctx)
@@ -104,6 +105,9 @@ def init_commands(slash, bot):
             #apply context for web controls
             g_data = get_guild_data(ctx.guild.id)
             g_data.get_audio_player(ctx)
+            q_len = g_data.get_queue_len()
+            if q_len:   
+                await ctx.send('Audio queue is loaded. You can /resume it now.')
     @slash.slash(name="leave",
                 description="Disconnect the bot from the voice channel.",
                 )
@@ -119,6 +123,8 @@ def init_commands(slash, bot):
                 )
     async def resume(ctx: Context):
         try:
+            if await _join_channel(ctx) == False:
+                await ctx.send('Unable to join the voice channel.')  
             g_data = get_guild_data(ctx.guild.id)
             if ctx.voice_client.is_paused():
                 ctx.voice_client.resume()
@@ -127,7 +133,9 @@ def init_commands(slash, bot):
             elif not ctx.voice_client.is_playing():
                 a_player = g_data.get_audio_player(ctx)
                 a_player.ensure_context(ctx)
-                audio_data = await a_player.play_from_url(g_data.get_queue()[0].url)
+                if not g_data.cur_audio:
+                    g_data.queue_advance()
+                audio_data = await a_player.play_from_url(g_data.cur_audio.url)
                 g_data.set_audio_started(audio_data, audio_data.time_offset)
             else:
                 await ctx.send("Nothing to resume")
@@ -172,8 +180,8 @@ def init_commands(slash, bot):
             a_player = g_data.get_audio_player(ctx)
             await a_player.stop_audio(False)
             g_data.queue_back()
-            await a_player.play_from_url(g_data.cur_audio.url, audio_data=g_data.cur_audio)
             await ctx.send('Playing previous')
+            await a_player.play_from_url(g_data.cur_audio.url, audio_data=g_data.cur_audio)
         except QueueIsEmpty:
             await ctx.send('Queue is empty')
         except Exception as e:
@@ -212,7 +220,7 @@ def init_commands(slash, bot):
     async def list_queue(ctx: Context):
         try: 
             g_data = get_guild_data(ctx.guild.id)
-            now_playing = f'{g_data.cur_audio.title} | {g_data.cur_audio.url}' if g_data.cur_audio != None else 'Nothing'
+            now_playing = f'{g_data.cur_audio.title} | {g_data.cur_audio.url}' if g_data.cur_audio else 'Nothing'
             reply = f'Now playing: {now_playing}\n'
             counter = 0
             for audio in g_data.get_queue():

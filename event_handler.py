@@ -7,10 +7,14 @@ from discord.utils import find
 def init_events(bot):
     @bot.event
     async def on_ready():
-        print("Ready. Initing queues...")
+        print("Ready. Initing guilds...")
         for g in bot.guilds:
             guild_data[g.id]=GuildData(g.id, bot)
-        print(str(len(bot.guilds))+" queues found")
+            try:
+                guild_data[g.id].load_queue()
+            except Exception as e:
+                print(e)
+        print(str(len(bot.guilds))+" guilds found")
     @bot.event
     async def on_guild_remove(guild):
         try:
@@ -37,16 +41,12 @@ def init_events(bot):
         if after.channel is None:
             print("left channel")
             if g_data.is_queue_persistent ==False:
-                g_data.audio_queue.empty() 
-            g_data.audio_player = None
+                g_data.queue_clear() 
             g_data.set_audio_stopped()
+            g_data.audio_player = None
             vc = find(lambda x: x.guild.id == g_id, bot.voice_clients)
             if vc:
                 vc.cleanup()
         else:
             print("joined channel")
-            try:
-                g_data.load_queue()
-            except Exception as e:
-                print(e)
 

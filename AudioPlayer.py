@@ -10,21 +10,18 @@ from asyncio import sleep
 async def _try_send(ctx:Context or None, msg: str):
     try:
         if ctx:
-            await ctx.send(msg)
+            return await ctx.send(msg)
     except:
-        pass
+        return None
 
 class AudioPlayer:
-    vc = None
-    ctx = None
-    bot = None
-    g_data = None
     def __init__(self, bot, guild_data:GuildData, handler:Context or VoiceClient):
         if type(handler) is SlashContext:
             self.ctx = handler
             self.vc = handler.voice_client
         elif handler:
             self.vc=handler
+            self.ctx = None
         else:
             raise Exception('Invalid handler passed')
         self.bot = bot
@@ -46,7 +43,9 @@ class AudioPlayer:
         #if await _join_channel(ctx) == False:
         #    ctx.send('Unable to join voice channel')
         ctx = self.ctx
-        vc = self.vc
+        vc:VoiceClient = self.vc
+        if not vc.is_connected():
+            return
         timecode = time_pos if time_pos else get_yt_timecode(url)
 
         if not after:
@@ -55,15 +54,21 @@ class AudioPlayer:
         if(timecode is not None and timecode> 86399):
             await _try_send(ctx, "Timecode must be less than 24 hours")
             return
-
+        msg = None
         if not audio_data or not audio_data.url_internal:
+            # make sure we don't get 'command interaction failed due to 3 seconds no reply timeout'
+            msg = await _try_send(ctx, 'Requesting audio data...')
             url_internal, title, length = await get_yt_data_async(url)
             audio_data = AudioData(url, url_internal, title, length, timecode)
+                
         
         opus_audio = await FFmpegOpusAudio.from_probe(audio_data.url_internal, before_options=f"-ss {timecode} -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5")
         vc.play(opus_audio, after = after)
         if not silent:
-            await _try_send(ctx, 'Now playing: **' + audio_data.title + '**')
+            if msg:
+                await msg.edit(content='Now playing: **' + audio_data.title + '**')
+            else:
+                await _try_send(ctx, 'Now playing: **' + audio_data.title + '**')
         return audio_data
     
     async def stop_audio(self, autoplay_next:bool):

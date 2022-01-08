@@ -14,11 +14,6 @@ guild_data = {}
 
 
 class AudioData():
-    url :str = None 
-    url_internal:str = None
-    title:str = None
-    length:int = None
-    time_offset:int = 0
     def __init__(self, url, url_internal, title, length, time_offset = 0) -> None:
         self.url = url
         self.url_internal=url_internal
@@ -32,23 +27,20 @@ class AudioData():
         
 
 class GuildData:
-    is_queue_persistent = True
-    __audio_queue = []
-    id = -1
-    cur_audio : AudioData = None
-    audio_player = None
-    audio_started = None
-    audio_paused_last = None
-    audio_paused_sum = get_timedelta_zero()
-    audio_length = 0
-    audio_offset = 0
-    autoplay_next = True
-    web_id:str
-    bot = None
     def __init__(self, guild_id, bot):
         self.id = guild_id
         self.web_id = uuid.uuid4().hex
         self.bot = bot
+        self.is_queue_persistent = True
+        self.__audio_queue = []
+        self.cur_audio : AudioData = None
+        self.audio_player = None
+        self.audio_started = None
+        self.audio_paused_last = None
+        self.audio_paused_sum = get_timedelta_zero()
+        self.audio_length = 0
+        self.audio_offset = 0
+        self.autoplay_next = True
     def queue_append(self, audio_data:AudioData):
         if len(self.__audio_queue) >= QUEUE_MAX_SIZE:
             raise QueueSizeMax()
@@ -62,7 +54,7 @@ class GuildData:
         if len(self.__audio_queue) >= QUEUE_MAX_SIZE:
             raise QueueSizeMax()
         self.__audio_queue.insert(0, audio_data)
-        self.store_queue(self)
+        self.store_queue()
     def queue_move(self, audio_data:AudioData, index):
         if audio_data in self.__audio_queue:
             from_index = self.__audio_queue.index(audio_data)
@@ -107,7 +99,6 @@ class GuildData:
         return list(map(lambda o: o.to_json(), self.__audio_queue))
     def get_queue_len(self):
         return len(self.__audio_queue)
-    #transfer cur_audio init here
     def set_audio_started(self, audio_data, sec_offset=0):
         self.cur_audio = audio_data
         self.audio_started = get_time_now()
@@ -145,15 +136,26 @@ class GuildData:
         if self.is_queue_persistent:
             if not os.path.exists('guild_data'):
                 os.mkdir('guild_data')
-            with open(os.path.join('guild_data', f'g_{self.id}.json'), 'w+') as f:
-                dump(self.get_queue_json(), f, indent=4, ensure_ascii=False)
+            with open(os.path.join('guild_data', f'g_{self.id}.json'), 'w+', encoding="utf-8") as f:
+                ca = self.cur_audio
+                if ca:
+                    cur_audio = {'url':ca.url, 'title':ca.title, 'length':ca.length}
+                else:
+                    cur_audio = None
+                dump({'cur_audio':cur_audio, 'queue':self.get_queue_json()}, f, indent=4, ensure_ascii=False)
     def load_queue(self):
         if self.is_queue_persistent:
+            print(f'Loading queue for {self.id}')
+            print(f'{self.id} - {self.__audio_queue}')
             if os.path.exists(os.path.join('guild_data', f'g_{self.id}.json')):
-                with open(os.path.join('guild_data', f'g_{self.id}.json'), 'r') as f:
-                    queue = load(f)
-                    for x in queue:
+                with open(os.path.join('guild_data', f'g_{self.id}.json'), 'r', encoding="utf-8") as f:
+                    data = load(f)
+                    cr = data['cur_audio'] if 'cur_audio' in data else None
+                    self.cur_audio = AudioData(cr['url'], None, cr['title'], cr['length']) if cr else None
+                    print(f'cur audio set to {self.cur_audio}')
+                    for x in data['queue']:
                         self.__audio_queue.append(AudioData(x['url'], None, x['title'], x['length']))
+            print(f'{self.id} - {self.__audio_queue}')
     
 
 
