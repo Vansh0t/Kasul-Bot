@@ -13,7 +13,7 @@ Kasul Bot doesn't depend on the single bot instance to serve audio. In fact you 
 - Slash Commands support
 - (Opt) [Web Controls UI](https://github.com/Vansh0t/Kasul-Bot-Web-Controls)
 
-## Set Up
+## Setup
 Discord treats all bots individualy so in order to be able to host a personal bot on your own server or PC you have to register it first on Discord Developer Portal.
 1. Go to https://discord.com/developers/applications
 2. Create 'New Application'
