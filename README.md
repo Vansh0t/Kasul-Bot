@@ -19,7 +19,7 @@ Discord treats all bots individualy so in order to be able to host a personal bo
 2. Create 'New Application'
 3. Go to 'Bot' tab, 'Add Bot'
 4. 'Copy' Bot Token and paste it in config.ini file in 'Token' field
-5. Go to 'OAuth2'->'General' tab
+5. Go to 'OAuth2'->'General' tab, set 'Authorization Method' to 'In-app authorization' 
 6. Set 'Scopes' as shown below
 ![image](https://user-images.githubusercontent.com/35566242/148388614-94eb7869-29f0-459f-9ca2-d9e63e20de3b.png)
 7. Set 'Bot Permissions' as shown below
