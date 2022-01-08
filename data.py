@@ -145,17 +145,13 @@ class GuildData:
                 dump({'cur_audio':cur_audio, 'queue':self.get_queue_json()}, f, indent=4, ensure_ascii=False)
     def load_queue(self):
         if self.is_queue_persistent:
-            print(f'Loading queue for {self.id}')
-            print(f'{self.id} - {self.__audio_queue}')
             if os.path.exists(os.path.join('guild_data', f'g_{self.id}.json')):
                 with open(os.path.join('guild_data', f'g_{self.id}.json'), 'r', encoding="utf-8") as f:
                     data = load(f)
                     cr = data['cur_audio'] if 'cur_audio' in data else None
                     self.cur_audio = AudioData(cr['url'], None, cr['title'], cr['length']) if cr else None
-                    print(f'cur audio set to {self.cur_audio}')
                     for x in data['queue']:
                         self.__audio_queue.append(AudioData(x['url'], None, x['title'], x['length']))
-            print(f'{self.id} - {self.__audio_queue}')
     
 
 
