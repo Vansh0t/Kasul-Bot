@@ -27,6 +27,7 @@ Discord treats all bots individualy so in order to be able to host a personal bo
 8. Go to 'OAuth2'->'URL Generator' tab
 9. In 'Scopes' check 'bot' and 'applications.commands'
 10. In 'Bot Permissions' set everything as shown in step 7
-11. Copy link and save it somewhere, then open the link in your browser and add bot to a server
+11. Copy the link and save it somewhere
 12. Launch Kasul Bot, it should be ready for use
-13. (Opt) Install [Web Controls UI](https://github.com/Vansh0t/Kasul-Bot-Web-Controls)
+13. Then open the link from step 11 in your browser and add bot to a server. THIS SHOULD BE DONE AFTER YOU LAUNCHED KASUL BOT AT LEAST ONCE TO SYNC SLASH COMMANDS. If your commands does not appear when you type / kick and add bot again.
+14. (Opt) Install [Web Controls UI](https://github.com/Vansh0t/Kasul-Bot-Web-Controls)
