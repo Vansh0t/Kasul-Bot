@@ -6,6 +6,7 @@ from web_cmd import set_bot
 from local_bridge import local_server
 from configparser import ConfigParser
 from discord.errors import LoginFailure
+from utils import get_working_dir
 
 bot = Bot('/')
 slash = SlashCommand(bot, sync_commands=True)
@@ -19,13 +20,14 @@ set_bot(bot)
 
 if __name__ == "__main__":
    parser = ConfigParser()
-   parser.read('config.ini')
+   dir = get_working_dir()
+   parser.read(dir+'/config.ini')
    ip = parser['LOCAL_SERVER']['Ip']
    port = parser['LOCAL_SERVER']['Port']
    token = parser['BOT']['Token']
    if not token:
       import os.path
-      if os.path.exists('dev_config.ini'):
+      if os.path.exists(dir+'/dev_config.ini'):
          print('dev_config.ini found, using Bot Token from it')
          parser.read('dev_config.ini')
          token = parser['DEV']['Token']

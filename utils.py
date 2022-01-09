@@ -4,6 +4,18 @@ from datetime import datetime, timedelta, timezone
 from sys import platform
 from json import loads
 
+
+
+def get_working_dir():
+    import sys
+    import os.path as path
+    if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+        app_path = sys._MEIPASS
+    else:
+        app_path = path.dirname(path.abspath(__file__))
+    print(app_path)
+    return app_path
+
 #def get_yt_data(url):
 #    yt = YouTube(url)
 #    vid = yt.streams.filter(only_audio=True, audio_codec='opus').last()
