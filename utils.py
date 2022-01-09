@@ -18,9 +18,9 @@ def get_working_dir():
 async def get_yt_data_async(url):
     proc_exe = None
     if platform=='win32':
-        proc_exe=get_working_dir()+'\\win\\yt_utils.exe'
+        proc_exe=get_working_dir()+'\\yt_utils.exe'
     else:
-        proc_exe=get_working_dir()+'/linux/yt_utils'
+        proc_exe=get_working_dir()+'/yt_utils'
     proc = await asyncio.create_subprocess_exec(
         proc_exe, url,
         stdout=asyncio.subprocess.PIPE,
