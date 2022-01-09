@@ -92,7 +92,7 @@ def init_commands(slash, bot):
             if (g_data.get_queue_len()==1 and g_data.cur_audio == None):
                 a_player = g_data.get_audio_player(ctx)
                 a_player.ensure_context(ctx)
-                audio_data = await a_player.play_from_url(url, audio_data=audio_data)
+                await a_player.play_from_url(url, audio_data=audio_data)
                 g_data.set_audio_started(audio_data, audio_data.time_offset)
         except Exception as e:
             exception('message')
