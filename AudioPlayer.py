@@ -6,6 +6,7 @@ from discord.voice_client import VoiceClient
 from utils import get_yt_timecode, get_yt_data_async
 from asyncio import sleep
 from sys import platform
+from os.path import join
 
 
 async def _try_send(ctx:Context or None, msg: str):
@@ -62,8 +63,8 @@ class AudioPlayer:
             url_internal, title, length = await get_yt_data_async(url)
             audio_data = AudioData(url, url_internal, title, length, timecode)
                 
-        executable = 'win\\ffmpeg' if platform =='win32' else 'ffmpeg'
-        opus_audio = await FFmpegOpusAudio.from_probe(audio_data.url_internal, before_options=f"-ss {timecode} -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", executable = executable)
+        executable = join('win', 'ffmpeg') if platform =='win32' else 'ffmpeg'
+        opus_audio = await FFmpegOpusAudio.from_probe(audio_data.url_internal, before_options=f"-ss {timecode} -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", executable = executable, method='fallback')
         vc.play(opus_audio, after = after)
         if not silent:
             if msg:
