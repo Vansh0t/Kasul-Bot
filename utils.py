@@ -13,21 +13,14 @@ def get_working_dir():
         app_path = sys._MEIPASS
     else:
         app_path = path.dirname(path.abspath(__file__))
-    print(app_path)
     return app_path
-
-#def get_yt_data(url):
-#    yt = YouTube(url)
-#    vid = yt.streams.filter(only_audio=True, audio_codec='opus').last()
-#    url_internal = vid.url
-#    return url_internal, yt.title, yt.length
 
 async def get_yt_data_async(url):
     proc_exe = None
     if platform=='win32':
-        proc_exe='win\\yt_utils.exe'
+        proc_exe=get_working_dir()+'\\win\\yt_utils.exe'
     else:
-        proc_exe='linux/yt_utils'
+        proc_exe=get_working_dir()+'/linux/yt_utils'
     proc = await asyncio.create_subprocess_exec(
         proc_exe, url,
         stdout=asyncio.subprocess.PIPE,
