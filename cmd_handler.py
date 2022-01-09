@@ -1,7 +1,6 @@
 import asyncio
-from discord import voice_client
 from discord.ext.commands import Context
-from data import get_guild_data, GuildData, QueueIsEmpty, AudioData
+from data import get_guild_data, QueueIsEmpty, AudioData
 from discord_slash.utils.manage_commands import create_option
 from utils import get_yt_data_async
 from logging import exception
@@ -36,11 +35,13 @@ def init_commands(slash, bot):
         
     @slash.slash(name="ping",
                 description="Sends ping to test bot's condition",
+                #guild_ids = dev_guild_ids
                 )
     async def ping(ctx: Context):
         await ctx.send('pong')
     @slash.slash(name="play",
                 description="Priority fast play audio from url. Doesn't add to the queue.",
+                #guild_ids = dev_guild_ids,
                 options=[
                     create_option(
                       name="url",
@@ -75,6 +76,7 @@ def init_commands(slash, bot):
                       required=True
                     )
                 ],
+                #guild_ids = dev_guild_ids
                 )
     async def enqueue(ctx: Context, url):
         try:
@@ -97,6 +99,7 @@ def init_commands(slash, bot):
             await ctx.send("Unable to execute command!")
     @slash.slash(name="join",
                 description="Join the bot to the voice channel of the caller.",
+                #guild_ids = dev_guild_ids
                 )
     async def join(ctx: Context):
         if await _join_channel(ctx) == False:
@@ -110,6 +113,7 @@ def init_commands(slash, bot):
                 await ctx.send('Audio queue is loaded. You can /resume it now.')
     @slash.slash(name="leave",
                 description="Disconnect the bot from the voice channel.",
+                #guild_ids = dev_guild_ids
                 )
     async def leave(ctx: Context):
         try:
@@ -120,6 +124,7 @@ def init_commands(slash, bot):
             await ctx.send("Not in the channel!")
     @slash.slash(name="resume",
                 description="Resume paused audio or start playing the first from the queue.",
+                #guild_ids = dev_guild_ids
                 )
     async def resume(ctx: Context):
         try:
@@ -144,6 +149,7 @@ def init_commands(slash, bot):
             await ctx.send("Unable to execute command!")
     @slash.slash(name="pause",
                 description="Pause the currently playing audio.",
+                #guild_ids = dev_guild_ids
                 )
     async def pause(ctx: Context):
         try:
@@ -159,6 +165,7 @@ def init_commands(slash, bot):
             await ctx.send("Unable to execute command!")
     @slash.slash(name="skip",
                 description="Skip the currently playing audio.",
+                #guild_ids = dev_guild_ids
                 )
     async def skip(ctx: Context):
         try:
@@ -173,6 +180,7 @@ def init_commands(slash, bot):
             await ctx.send("Unable to execute command!")
     @slash.slash(name="back",
                 description="Play previous audio from the queue.",
+                #guild_ids = dev_guild_ids
                 )
     async def back(ctx: Context):
         try:
@@ -190,6 +198,7 @@ def init_commands(slash, bot):
 
     @slash.slash(name="clear_queue",
                 description="Clear the queue. Doesn't stop currently playing audio. To clear with stop use stop_clear_queue",
+                #guild_ids = dev_guild_ids
                 )
     async def clear_queue(ctx: Context):
         try:
@@ -202,6 +211,7 @@ def init_commands(slash, bot):
     
     @slash.slash(name="stop_clear_queue",
                 description="Clear the queue and stop any playing audio.",
+                #guild_ids = dev_guild_ids
                 )
     async def stop_clear_queue(ctx: Context):
         try:
@@ -216,6 +226,7 @@ def init_commands(slash, bot):
 
     @slash.slash(name="list_queue",
                 description="Shows the current queue.",
+                #guild_ids = dev_guild_ids
                 )
     async def list_queue(ctx: Context):
         try: 
@@ -240,6 +251,7 @@ def init_commands(slash, bot):
                       required=True
                     )
                 ],
+                guild_ids = dev_guild_ids
                 )
     async def keep_queue(ctx: Context, bool_value):
         try: 
@@ -251,6 +263,7 @@ def init_commands(slash, bot):
             await ctx.send("Unable to execute command!")
     @slash.slash(name="web",
                 description="Get url from web controls",
+                #guild_ids = dev_guild_ids
                 )
     async def web(ctx: Context):
         try: 

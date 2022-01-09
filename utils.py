@@ -1,6 +1,7 @@
 import asyncio
 from urllib.parse import urlparse, parse_qs
 from datetime import datetime, timedelta, timezone
+from sys import platform
 from json import loads
 
 #def get_yt_data(url):
@@ -10,8 +11,13 @@ from json import loads
 #    return url_internal, yt.title, yt.length
 
 async def get_yt_data_async(url):
+    proc_exe = None
+    if platform=='win32':
+        proc_exe='win\\yt_utils.exe'
+    else:
+        proc_exe='linux/yt_utils'
     proc = await asyncio.create_subprocess_exec(
-        'yt_utils.exe', url,
+        proc_exe, url,
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE)
     stdout, stderr = await proc.communicate()

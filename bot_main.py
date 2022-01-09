@@ -8,11 +8,12 @@ from configparser import ConfigParser
 from discord.errors import LoginFailure
 
 bot = Bot('/')
-slash = SlashCommand(bot)
+slash = SlashCommand(bot, sync_commands=True)
 #print(slash.commands)
 init_events(bot)
 init_commands(slash, bot)
 set_bot(bot)
+
 
 
 
