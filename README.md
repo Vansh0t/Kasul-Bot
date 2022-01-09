@@ -2,7 +2,7 @@
 
 
 
-Kasul Bot is easy to deploy audio bot made with [discord.py](https://github.com/Rapptz/discord.py), [discord-py-slash-command](https://pypi.org/project/discord-py-slash-command/) and [pytube](https://github.com/pytube/pytube). Packaged into executable with [pyinstaller](https://pypi.org/project/pyinstaller/) It has a convenient web ui controls feature, check it out [here](https://github.com/Vansh0t/Kasul-Bot-Web-Controls)
+Kasul Bot is easy to deploy audio bot made with [discord.py](https://github.com/Rapptz/discord.py), [discord-py-slash-command](https://pypi.org/project/discord-py-slash-command/) and [pytube](https://github.com/pytube/pytube). Packaged into executable with [pyinstaller](https://pypi.org/project/pyinstaller/) It has a convenient Web UI Controls feature, check it out [here](https://github.com/Vansh0t/Kasul-Bot-Web-Controls)
 
 Kasul Bot doesn't depend on the single bot instance to serve audio. In fact you create your own bot on Discord Developer Portal (see 'Installation' below) and just pass its id to config.ini of Kasul Bot, that's all, no coding required. This means you use your own dedicated server or PC only for your discord servers to avoid performance and stability issues of many popular discord audio streaming bots.
 
